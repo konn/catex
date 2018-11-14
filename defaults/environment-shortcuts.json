@@ -1,0 +1,23 @@
+{
+  "a": "align*",
+  "A": "align",
+  "c": "center",
+  "d": "document",
+  "D": "description",
+  "e": "enumerate",
+  "E": "equation",
+  "g": "gather*",
+  "G": "gather",
+  "i": "itemize",
+  "l": "flushleft",
+  "m": "minipage",
+  "t": "tabbing",
+  "T": "tabular",
+  "^t": "table",
+  "p": "picture",
+  "q": "quote",
+  "Q": "quotation",
+  "r": "flushright",
+  "v": "verbatim",
+  "V": "verse"
+}

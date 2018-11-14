@@ -1,0 +1,234 @@
+[
+  "part",
+  "chapter",
+  "chapter*",
+  "section",
+  "section*",
+  "subsection",
+  "subsection*",
+  "subsubsection",
+  "paragraph",
+  "subparagraph",
+  "author",
+  "emph",
+  "structure",
+  "thanks",
+  "documentstyle",
+  "pagestyle",
+  "thispagestyle",
+  "title",
+  "underline",
+  "name",
+  "makebox",
+  "footnote",
+  "footnotetext",
+  "index",
+  "hspace*",
+  "vspace*",
+  "bibliography",
+  "bibliographystyle",
+  "bibitem",
+  "cite",
+  "input",
+  "include",
+  "includeonly",
+  "mbox",
+  "hbox",
+  "caption",
+  "arabic",
+  "uline",
+  "newcounter",
+  "newlength",
+  {
+    "name": "setlength",
+    "args": ["fixed", "fixed"]
+  },
+  {
+    "name": "addtolength",
+    "args": ["fixed", "fixed"]
+  },
+  {
+    "name": "settowidth",
+    "args": ["fixed", "fixed"]
+  },
+  {
+    "name": "setcounter",
+    "args": ["fixed", "fixed"]
+  },
+  {
+    "name": "addtocounter",
+    "args": ["fixed", "fixed"]
+  },
+  {
+    "name": "stepcounter",
+    "args": ["fixed", "fixed"]
+  },
+  {
+    "name": "newcommand",
+    "args": ["fixed", "optional", "fixed"]
+  },
+  {
+    "name": "renewcommand",
+    "args": ["fixed", "fixed"]
+  },
+  {
+    "name": "newenvironment",
+    "args": ["fixed", "fixed", "fixed"]
+  },
+  {
+    "name": "newtheorem",
+    "args": ["fixed", "fixed"]
+  },
+  "cline",
+  "framebox",
+  {
+    "name": "savebox",
+    "args": ["fixed", "fixed"]
+  },
+  {
+    "name": "sbox",
+    "args": ["fixed", "fixed"]
+  },
+  "newsavebox",
+  "usebox",
+  "date",
+  "put",
+  "ref",
+  "pageref",
+  "tabref",
+  "figref",
+  {
+    "name": "raisebox",
+    "args": ["fixed", "optional", "optional", "fixed"]
+  },
+  {
+    "name": "multicolumn",
+    "args": ["fixed", "fixed", "fixed"]
+  },
+  "shortstack",
+  {
+    "name": "parbox",
+    "args": ["fixed", "fixed"]
+  },
+  "tilde",
+  "hat",
+  "check",
+  "bar",
+  "dot",
+  "ddot",
+  "vec",
+  "widetilde",
+  "widehat",
+  "overline",
+  "overrightarrow",
+  {
+    "name": "frac",
+    "args": ["fixed", "fixed"]
+  },
+  "sqrt",
+  "mathrm",
+  "mathbf",
+  "mathit",
+  "mathbb",
+  "mathscr",
+  "mathrsfs",
+  "cref",
+  "crefrange",
+  "cpageref",
+  "namecref",
+  "namecpageref",
+  "frametitle",
+  "framesubtitle",
+  {
+    "name": "documentclass",
+    "args": ["optional", "fixed"]
+  },
+  {
+    "name": "usepackage",
+    "args": ["optional", "fixed"]
+  },
+  "textbf",
+  "textgt",
+  "textit",
+  "textmc",
+  "textmd",
+  "textnormal",
+  "textrm",
+  "textsc",
+  "textsf",
+  "textsl",
+  "texttt",
+  "textup",
+  "mathbf",
+  "mathcal",
+  "mathit",
+  "mathnormal",
+  "mathrm",
+  "mathsf",
+  "mathtt",
+  "text",
+  "textcircled",
+  { "name": "scalebox", "args": ["fixed", "fixed"] },
+  {
+    "name": "rotatebox",
+    "args": ["fixed", "fixed"]
+  },
+  {
+    "name": "resizebox",
+    "args": ["fixed", "fixed", "fixed"]
+  },
+  "reflectbox",
+  {
+    "name": "colorbox",
+    "args": ["fixed", "fixed"]
+  },
+  {
+    "name": "fcolorbox",
+    "args": ["fixed", "fixed", "fixed"]
+  },
+  {
+    "name": "textcolor",
+    "args": ["fixed", "fixed"]
+  },
+  "color",
+  "pagecolor",
+  "includegraphics",
+  "includegraphics*",
+  "includesvg",
+  "bou",
+  "url",
+  "shadowbox",
+  "doublebox",
+  "ovalbox",
+  "Ovalbox",
+  "fancyoval",
+  "keytop",
+  {
+    "name": "mask",
+    "args": ["fixed", "fixed"]
+  },
+  {
+    "name": "maskbox",
+    "args": ["fixed", "fixed", "fixed", "fixed", "fixed"]
+  },
+  "bm",
+  "verbfile",
+  "listing",
+  {
+    "name": "slashbox",
+    "args": ["fixed", "fixed"]
+  },
+  {
+    "name": "backslashbox",
+    "args": ["fixed", "fixed"]
+  },
+  {
+    "name": "DeclareMathOperator",
+    "args": ["fixed", "fixed"]
+  },
+  "boldsymbol",
+  "pmb",
+  "eqref",
+  "tag",
+  "tag*"
+]

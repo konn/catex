@@ -1,0 +1,227 @@
+{
+  "name": "catex",
+  "displayName": "CaTeX",
+  "description": "YaTeX-like completions for LaTeX, based on Generic Input Method extension",
+  "version": "0.0.1",
+  "publisher": "mr-konn",
+  "engines": {
+    "vscode": "^1.29.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:latex"
+  ],
+  "main": "./out/extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.generic-input-method.complete.catex.section",
+        "title": "LaTeX \\section{..}-like completion"
+      },
+      {
+        "command": "extension.complete.catex.maketitle",
+        "title": "LaTeX \\maketitle-like completion"
+      },
+      {
+        "command": "extension.complete.catex.large",
+        "title": "LaTeX {\\Large }-like completion"
+      },
+      {
+        "command": "extension.complete.catex.environment",
+        "title": "LaTeX \\begin{..}\\end{..} completion"
+      }
+    ],
+    "configuration": [
+      {
+        "title": "CaTeX completion configuration",
+        "properties": {
+          "catex.dictionary.section": {
+            "title": "Section Dictionary",
+            "markdownDescription": "CaTeX completion dictionary for `\\section{..}`-like commands",
+            "oneOf": [
+              {
+                "$id": "#include-directive",
+                "title": "Include Path",
+                "description": "A path to the included dictionary",
+                "type": "object",
+                "properties": {
+                  "include": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "include"
+                ]
+              },
+              {
+                "$id": "#command-definition-list",
+                "type": "array",
+                "title": "Section completion dictionary",
+                "items": {
+                  "oneOf": [
+                    {
+                      "$ref": "#include-directive"
+                    },
+                    {
+                      "type": "string",
+                      "title": "Command name",
+                      "description": "Command name"
+                    },
+                    {
+                      "$id": "#command-definition",
+                      "type": "object",
+                      "title": "Command or Environment",
+                      "description": "Command definition",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "args": {
+                          "type": "array",
+                          "items": {
+                            "$id": "#argument-spec",
+                            "anyOf": [
+                              {
+                                "$id": "#argument-kind",
+                                "type": "string",
+                                "enum": [
+                                  "fixed",
+                                  "optional"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "kind": {
+                                    "$ref": "#argument-kind"
+                                  },
+                                  "candidates": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "kind"
+                                ]
+                              }
+                            ]
+                          },
+                          "optional": true
+                        }
+                      },
+                      "required": [
+                        "name"
+                      ]
+                    }
+                  ]
+                }
+              }
+            ],
+            "default": {
+              "include": "defaults/sections.json"
+            }
+          },
+          "catex.dictionary.environment": {
+            "title": "Environment Dictionary",
+            "description": "CaTeX completion dictionary for environments",
+            "default": {
+              "include": "defaults/environments.json"
+            },
+            "oneOf": [
+              {
+                "$ref": "#include-directive"
+              },
+              {
+                "$ref": "#command-definition-list"
+              }
+            ]
+          },
+          "catex.dictionary.maketitle": {
+            "title": "Maketitle Dictionary",
+            "markdownDescription": "CaTeX completion dictionary for `\\maketitle`-like commands",
+            "default": {
+              "include": "defaults/maketitles.json"
+            },
+            "oneOf": [
+              {
+                "$ref": "#include-directive"
+              },
+              {
+                "$ref": "#command-definition-list"
+              }
+            ]
+          },
+          "catex.dictionary.large": {
+            "title": "\\Large-like Dictionary",
+            "markdownDescription": "CaTeX completion dictionary for `{\\Large }`-like commands",
+            "default": {
+              "include": "defaults/larges.json"
+            },
+            "oneOf": [
+              {
+                "$ref": "#include-directive"
+              },
+              {
+                "title": "Command names and/or includes",
+                "description": "A list of commands or include-directives",
+                "type": "array",
+                "items": {
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "$ref": "#include-directive"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "extension.complete.catex.section",
+        "key": "Ctrl+C S"
+      },
+      {
+        "command": "extension.complete.catex.large",
+        "key": "Ctrl+C L"
+      },
+      {
+        "command": "extension.complete.catex.maketitle",
+        "key": "Ctrl+C M"
+      },
+      {
+        "command": "extension.complete.catex.environment",
+        "key": "Ctrl+C B [Space]"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+  },
+  "extensionDependencies": [
+    "mr-konn.generic-input-method"
+  ],
+  "devDependencies": {
+    "typescript": "^2.6.1",
+    "vscode": "^1.1.21",
+    "tslint": "^5.8.0",
+    "@types/node": "^8.10.25",
+    "@types/mocha": "^2.2.42"
+  }
+}
