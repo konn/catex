@@ -7,7 +7,8 @@ import { WorkspaceConfiguration, workspace, extensions } from "vscode";
 import {
   CommandDictionary,
   cmdDicToLaTeXItemConfs,
-  LargeDictionary
+  LargeDictionary,
+  largeDicToLaTeXItemConfs
 } from "./definitions";
 import {
   CommandType,
@@ -38,7 +39,8 @@ export async function activate(context: vscode.ExtensionContext) {
   }
   const api: GenericInputMethodAPI = await gim.activate();
   const conf: WorkspaceConfiguration = workspace.getConfiguration();
-  function register_completer(dict: string, type: CommandType, name: string) {
+  function register_completer(dict: string, type: CommandType) {
+    let name = `${dict.charAt(0).toUpperCase}${dict.slice(1)}`;
     const items: CommandDictionary = conf.get(`catex.dictionary.${dict}`, {
       include: `defaults/${dict}s.json`
     });
@@ -53,14 +55,14 @@ export async function activate(context: vscode.ExtensionContext) {
     };
     api.registerInputMethod(IM);
   }
-  register_completer("section", CommandType.Section, "Section");
-  register_completer("environment", CommandType.Environment, "Environment");
-  register_completer("Maketitle", CommandType.Maketitle, "Maketitle");
+  register_completer("section", CommandType.Section);
+  register_completer("environment", CommandType.Environment);
+  register_completer("maketitle", CommandType.Maketitle);
 
   const items: LargeDictionary = conf.get(`catex.dictionary.large`, {
     include: "defaults/larges.json"
   });
-  const dic = cmdDicToLaTeXItemConfs(context, CommandType.Large, items);
+  const dic = largeDicToLaTeXItemConfs(context, items);
   const IM: InputMethodConf = {
     name: `CaTeX Large Completer`,
     commandName: `catex.large`,
