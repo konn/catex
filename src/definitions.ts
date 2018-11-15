@@ -84,16 +84,12 @@ export function cmdDicToLaTeXItemConfs(
 ): LaTeXInputMethodItemConfig[] {
   const items: LaTeXInputMethodItemConfig[] = new Array();
   if (isIncludeDirective(is)) {
-    const ls: Command[] = JSON.parse(
-      readFileSync(context.asAbsolutePath(is.include)).toString()
-    );
+    const ls: Command[] = parseDefault(context, is.include);
     ls.forEach(cmd => items.push(cmdToLaTeXConf(cmdType, cmd)));
   } else {
     is.forEach(i => {
       if (isIncludeDirective(i)) {
-        const is: Command[] = JSON.parse(
-          readFileSync(context.asAbsolutePath(i.include)).toString()
-        );
+        const is: Command[] = parseDefault(context, i.include);
         is.forEach(cmd => items.push(cmdToLaTeXConf(cmdType, cmd)));
       } else {
         items.push(cmdToLaTeXConf(cmdType, i));
@@ -113,23 +109,27 @@ function toLarge(large: string): LaTeXInputMethodItemConfig {
   };
 }
 
+function parseDefault<T>(context: ExtensionContext, path: string): T {
+  return JSON.parse(readFileSync(context.asAbsolutePath(path)).toString());
+}
+
 export function largeDicToLaTeXItemConfs(
   context: ExtensionContext,
   is: LargeDictionary
 ): LaTeXInputMethodItemConfig[] {
   const items: LaTeXInputMethodItemConfig[] = new Array();
   if (isIncludeDirective(is)) {
-    const os: string[] = JSON.parse(
-      readFileSync(context.asAbsolutePath(is.include)).toString()
-    );
-    os.forEach(cmd => items.push(toLarge(cmd)));
+    const os: string[] = parseDefault(context, is.include);
+    os.forEach(cmd => {
+      items.push(toLarge(cmd));
+    });
   } else {
     is.forEach(i => {
       if (isIncludeDirective(i)) {
-        const is: string[] = JSON.parse(
-          readFileSync(context.asAbsolutePath(i.include)).toString()
-        );
-        is.forEach(cmd => items.push(toLarge(cmd)));
+        const is: string[] = parseDefault(context, i.include);
+        is.forEach(cmd => {
+          items.push(toLarge(cmd));
+        });
       } else {
         items.push(toLarge(i));
       }
