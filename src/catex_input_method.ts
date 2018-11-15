@@ -136,32 +136,32 @@ export class RegistererItem implements RenderableQuickPickItem {
   ) {
     const conf: WorkspaceConfiguration = workspace.getConfiguration();
     const re = /^(\{[^\{\}\[\]]*?\}|\[[^\{\}\[\]]*?\])*$/;
-
-    const spec: boolean | String | undefined =
+    const noArgs =
       this.kind === CommandType.Maketitle ||
       this.kind === CommandType.Large ||
-      this.kind === CommandType.Text
-        ? true
-        : await window.showInputBox({
-            prompt: "Enter argument spec:",
-            placeHolder: "{}[]{}",
-            validateInput: input => {
-              if (re.test(input)) {
-                return;
-              } else {
-                return "Must be a repeat of \"[(placeholder)]\" and/or \"{(placeholder)}\"";
-              }
+      this.kind === CommandType.Text;
+    const specStr: String | undefined = noArgs
+      ? ""
+      : await window.showInputBox({
+          prompt: "Enter argument spec:",
+          placeHolder: "{}[]{}",
+          validateInput: input => {
+            if (re.test(input)) {
+              return;
+            } else {
+              return "Must be a repeat of \"[(placeholder)]\" and/or \"{(placeholder)}\"";
             }
-          });
-    if (spec) {
+          }
+        });
+    if (specStr) {
       let args: ArgSpec[] | undefined;
-      if (typeof spec === "string") {
-        if (spec.length > 0) {
+      if (typeof specStr === "string") {
+        if (!noArgs && specStr.length > 0) {
           args = [];
           let match: RegExpExecArray | null;
           const itemRe = /\{[^\{\}\[\]]*?\}|\[[^\{\}\[\]]*?\]/g;
 
-          while ((match = itemRe.exec(spec))) {
+          while ((match = itemRe.exec(specStr))) {
             const mbody = match[0].slice(1, match[0].length - 1);
             let placeholder: string | undefined;
             if (mbody.length > 1) {
