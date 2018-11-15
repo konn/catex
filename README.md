@@ -12,6 +12,14 @@
 
 [YaTeX]: https://yatex.org
 
+## DEMOs
+
+### Image and Greek completion for LaTeX
+
+![GIF Anime](images/image-and-greek.gif)
+
+![GIF Anime](images/image-invoked.gif)
+
 ## TODOs
 
 - Adds GIF demos
