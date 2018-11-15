@@ -4,10 +4,10 @@
 
 - [YaTeX]-like image/greek completion
 - Powerful snippet completion for LaTeX commands/environments:
-  - `\maketitle`-like completion
-  - `\section{}`-like completion
-  - `{\Large }`-like completion
-  - `\begin{}\end{}`-type completion
+  - `\maketitle`-like completion (<kbd>C-c m</kbd>)
+  - `\section{}`-like completion (<kbd>C-c s</kbd>)
+  - `{\Large }`-like completion (<kbd>C-c l</kbd>)
+  - `\begin{}\end{}`-type completion (<kbd>C-c b</kbd>)
     - In either completion, you can automatically register unknown commands!
 
 [YaTeX]: https://yatex.org
