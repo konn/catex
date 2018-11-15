@@ -4,7 +4,6 @@ import { SnippetString } from "vscode";
 
 export const LaTeXExpander: Expander = i =>
   new LaTeXInputMethodItem(i as LaTeXInputMethodItemConfig);
-
 export interface LaTeXInputMethodItemConfig {
   label: string;
   body: string;
@@ -36,7 +35,6 @@ export class LaTeXInputMethodItem implements InputMethodItem {
    */
   public toSnippet(selection: string = ""): SnippetString {
     let rendered = "";
-
     let args = (this.args || []).map(render_argspec(selection)).join("");
 
     if (this.type === CommandType.Environment) {
@@ -73,6 +71,8 @@ export class LaTeXInputMethodItem implements InputMethodItem {
       }
     } else if (this.type === CommandType.Text) {
       rendered = this.body;
+    } else {
+      rendered = `\\${this.body}${args}`;
     }
     return new SnippetString(rendered);
   }
