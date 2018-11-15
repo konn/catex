@@ -41,13 +41,17 @@ export class LaTeXInputMethodItem implements InputMethodItem {
 
     if (this.type === CommandType.Environment) {
       if (selection) {
-        rendered = `\\begin{${this.body}}${args}
-    ${selection}$0
-  \\end{${this.body}}`;
+        rendered = [
+          `\\begin{${this.body}}${args}`,
+          `  ${selection}$0`,
+          `\\end{${this.body}}`
+        ].join("\n");
       } else {
-        rendered = `\\begin{${this.body}}${args}
-    $0
-  \\end{${this.body}}`;
+        rendered = [
+          `\\begin{${this.body}}${args}`,
+          "  $0",
+          `\\end{${this.body}}`
+        ].join("\n");
       }
     } else if (this.type === CommandType.Large) {
       if (selection) {
