@@ -59,6 +59,8 @@ export class LaTeXInputMethodItem implements InputMethodItem {
       } else {
         rendered = `{\\${this.body} $1}`;
       }
+    } else if (this.type === CommandType.Maketitle) {
+      rendered = `\\${this.body}`;
     } else if (this.type === CommandType.Section) {
       if (!this.args || this.args.length === 0) {
         if (selection.length === 0) {
