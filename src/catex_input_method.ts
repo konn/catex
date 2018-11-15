@@ -18,12 +18,7 @@ import {
 } from "vscode";
 import { CommandType, ArgSpec, ArgKind } from "./latex_syntax";
 import { LaTeXInputMethodItem, LaTeXExpander } from "./latex_expander";
-import {
-  preview,
-  LargeDictionary,
-  CommandDictionary,
-  CommandDefinition
-} from "./definitions";
+import { preview, CommandDefinition } from "./definitions";
 
 export default class CaTeXInputMethod implements InputMethodConf {
   public name: string;
@@ -57,24 +52,38 @@ export default class CaTeXInputMethod implements InputMethodConf {
       const quickPick: QuickPick<
         RenderableQuickPickItem | RegistererItem
       > = window.createQuickPick();
+      quickPick.canSelectMany = false;
       quickPick.items = picks;
       quickPick.onDidChangeValue(value => {
-        console.log(
-          `Responding to ${value} with items ${JSON.stringify(
-            quickPick.activeItems
-          )}`
-        );
+        quickPick.items = picks;
+
         if (
           value.length > 0 &&
           !quickPick.activeItems.some(i => i.label === value)
         ) {
+          const actives = quickPick.activeItems;
           const defs = [
-            new RegistererItem(this.dictName, this.kind, value, true),
-            new RegistererItem(this.dictName, this.kind, value, false)
+            new RegistererItem(
+              this.dictName,
+              this.kind,
+              value,
+              ConfigurationTarget.Global
+            ),
+            new RegistererItem(
+              this.dictName,
+              this.kind,
+              value,
+              ConfigurationTarget.Workspace
+            ),
+            new RegistererItem(
+              this.dictName,
+              this.kind,
+              value,
+              ConfigurationTarget.WorkspaceFolder
+            )
           ];
           quickPick.items = picks.concat(defs);
-        } else {
-          quickPick.items = picks;
+          quickPick.activeItems = actives;
         }
       });
       quickPick.onDidAccept(() => {
@@ -99,22 +108,21 @@ function isRegisterer(reg: RenderableQuickPickItem): reg is RegistererItem {
 export class RegistererItem implements RenderableQuickPickItem {
   public description: string;
   public picked: boolean = false;
-  confTarget: ConfigurationTarget;
   constructor(
     public dictionary: string,
     private kind: CommandType,
     public label: string,
-    global: boolean
+    private confTarget: ConfigurationTarget
   ) {
-    if (global) {
+    if (confTarget === ConfigurationTarget.Global) {
       this.description = `Create Global completion for "${label}"`;
-    } else {
+    } else if (confTarget === ConfigurationTarget.Workspace) {
       this.description = `Create Workspace completion for "${label}"`;
+    } else if (confTarget === ConfigurationTarget.WorkspaceFolder) {
+      this.description = `Create Workspace Folder completion for "${label}"`;
+    } else {
+      this.description = `Create Unknown completion for "${label}"`;
     }
-
-    this.confTarget = global
-      ? ConfigurationTarget.Global
-      : ConfigurationTarget.Workspace;
   }
 
   public toSnippet(): SnippetString {
@@ -179,20 +187,12 @@ export class RegistererItem implements RenderableQuickPickItem {
         type: this.kind
       };
 
-      console.log(`Final conf: ${JSON.stringify(itemConf)}`);
-
       const item = new LaTeXInputMethodItem(itemConf);
       (<LaTeXInputMethodItem[]>im.dictionary).push(item);
-      console.log(`Updated IM dictionary: ${JSON.stringify(im.dictionary)}`);
       await editor.insertSnippet(item.toSnippet(selection));
-      console.log(
-        `Snippet got inserted!: ${JSON.stringify(
-          item.toSnippet(selection).value
-        )}`
-      );
 
       const itemDef: string | CommandDefinition =
-        this.kind === CommandType.Large
+        this.kind === CommandType.Large || this.kind === CommandType.Maketitle
           ? this.label
           : { name: this.label, args };
       const curDic: any = conf.get(`catex.${this.dictionary}.dictionary`, [
@@ -204,13 +204,11 @@ export class RegistererItem implements RenderableQuickPickItem {
       } else {
         dic = [curDic, itemDef];
       }
-      console.log(`New VSCode ${JSON.stringify(dic)}`);
       await conf.update(
         `catex.${this.dictionary}.dictionary`,
         dic,
         this.confTarget
       );
-      console.log(`Updated VSCode configuration`);
     }
   }
 }

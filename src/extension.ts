@@ -6,8 +6,6 @@ import {
   WorkspaceConfiguration,
   workspace,
   extensions,
-  commands,
-  window,
   ExtensionContext
 } from "vscode";
 import {
@@ -20,6 +18,7 @@ import { InputMethodConf } from "./generic-input-method/input_method";
 import GenericInputMethodAPI from "./generic-input-method/api";
 import { CommandType } from "./latex_syntax";
 import CaTeXInputMethod from "./catex_input_method";
+import { LaTeXExpander } from "./latex_expander";
 
 export class CaTeXException implements Error {
   constructor(public name: string, public message: string) {}
@@ -45,6 +44,7 @@ export function activate(context: ExtensionContext) {
 
   gim.activate().then((api: GenericInputMethodAPI) => {
     const conf: WorkspaceConfiguration = workspace.getConfiguration();
+    api.registerExpander("latex", LaTeXExpander);
     function register_completer(dict: string, type: CommandType) {
       let name = `${dict.charAt(0).toUpperCase}${dict.slice(1)}`;
       const items: CommandDictionary = conf.get(`catex.dictionary.${dict}`, {
@@ -57,7 +57,7 @@ export function activate(context: ExtensionContext) {
         languages: ["latex"],
         triggers: [],
         dictionary: dic,
-        renderMode: "latex"
+        renderMode: LaTeXExpander
       };
       const IM = new CaTeXInputMethod(dict, type, context, imConf);
       api.registerInputMethod(IM);
@@ -70,14 +70,20 @@ export function activate(context: ExtensionContext) {
       include: "defaults/larges.json"
     });
     const dic = largeDicToLaTeXItemConfs(context, items);
-    const IM: InputMethodConf = {
+    const imConf: InputMethodConf = {
       name: `CaTeX Large Completer`,
       commandName: `catex.large`,
       languages: ["latex"],
       triggers: [],
       dictionary: dic,
-      renderMode: "latex"
+      renderMode: LaTeXExpander
     };
+    const IM = new CaTeXInputMethod(
+      "large",
+      CommandType.Large,
+      context,
+      imConf
+    );
     api.registerInputMethod(IM);
   });
 }
