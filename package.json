@@ -7,6 +7,15 @@
   "engines": {
     "vscode": "^1.29.0"
   },
+  "keywords": [
+    "LaTeX",
+    "CaTeX",
+    "YaTeX",
+    "image completion",
+    "greek completion",
+    "shape completion",
+    "completion"
+  ],
   "categories": [
     "Other"
   ],
@@ -18,25 +27,170 @@
     "commands": [
       {
         "command": "extension.generic-input-method.complete.catex.section",
+        "category": "CaTeX",
         "title": "LaTeX \\section{..}-like completion"
       },
       {
         "command": "extension.complete.catex.maketitle",
+        "category": "CaTeX",
         "title": "LaTeX \\maketitle-like completion"
       },
       {
         "command": "extension.complete.catex.large",
+        "category": "CaTeX",
         "title": "LaTeX {\\Large }-like completion"
       },
       {
         "command": "extension.complete.catex.environment",
+        "category": "CaTeX",
         "title": "LaTeX \\begin{..}\\end{..} completion"
+      },
+      {
+        "command": "extension.complete.catex.image",
+        "category": "CaTeX",
+        "title": "LaTeX: Complete by image"
+      },
+      {
+        "command": "extension.complete.catex.greek",
+        "category": "CaTeX",
+        "title": "LaTeX: Complete Greek"
+      },
+      {
+        "command": "extension.complete.catex.font",
+        "category": "CaTeX",
+        "title": "LaTeX Complete math fonts"
       }
     ],
     "configuration": [
       {
         "title": "CaTeX completion configuration",
         "properties": {
+          "catex.image-completion": {
+            "title": "Image Completion Settings",
+            "type": "object",
+            "description": "Input Method for image-completion settings",
+            "default": {
+              "name": "CaTeX Image Completion",
+              "languages": [
+                "latex"
+              ],
+              "triggers": [
+                ";"
+              ],
+              "dictionary": "defaults/images.json",
+              "renderMode": "latex"
+            },
+            "properties": {
+              "$id": "#input-method",
+              "name": {
+                "type": "string",
+                "description": "Input Method Name"
+              },
+              "languages": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Language Ids in which the IM will be activated"
+              },
+              "triggers": {
+                "type": "array",
+                "description": "Trigger characters to invoke the Input Method",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "dictionary": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "description": "Path to configuration json file"
+                  },
+                  {
+                    "type": "array",
+                    "description": "Input items",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "description": "External file to include as a dictionary"
+                        },
+                        {
+                          "type": "object",
+                          "title": "Completion Item",
+                          "properties": {
+                            "label": {
+                              "type": "string",
+                              "description": "Keystroke"
+                            },
+                            "body": {
+                              "type": "string",
+                              "description": "Completions to input"
+                            },
+                            "description": {
+                              "type": "string",
+                              "description": "Preview string",
+                              "default": ""
+                            },
+                            "renderMode": {
+                              "type": "string",
+                              "enum": [
+                                "latex",
+                                "string",
+                                "snippet"
+                              ]
+                            },
+                            "required": [
+                              "label",
+                              "body"
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "catex.greek-completion": {
+            "title": "Greek Completion Settings",
+            "type": "object",
+            "description": "Input Method for greek-completion settings",
+            "default": {
+              "name": "CaTeX Greek Completion",
+              "languages": [
+                "latex"
+              ],
+              "triggers": [
+                ":"
+              ],
+              "dictionary": "defaults/greeks.json",
+              "renderMode": "latex"
+            },
+            "properties": {
+              "$ref": "#input-method"
+            }
+          },
+          "catex.font-completion": {
+            "title": "Image Completion Settings",
+            "type": "object",
+            "description": "Input Method for font-completion settings",
+            "default": {
+              "name": "CaTeX Font Completion",
+              "languages": [
+                "latex"
+              ],
+              "triggers": [
+                "@"
+              ],
+              "dictionary": "defaults/fonts.json",
+              "renderMode": "latex"
+            },
+            "properties": {
+              "$ref": "#input-method"
+            }
+          },
           "catex.section.dictionary": {
             "title": "Section Dictionary",
             "markdownDescription": "CaTeX completion dictionary for `\\section{..}`-like commands",

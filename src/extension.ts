@@ -45,6 +45,33 @@ export function activate(context: ExtensionContext) {
   gim.activate().then((api: GenericInputMethodAPI) => {
     const conf: WorkspaceConfiguration = workspace.getConfiguration();
     api.registerExpander("latex", LaTeXExpander);
+    function register_input_method(dict: string, prefix: string) {
+      let dic: InputMethodConf = conf.get(`catex.${dict}-completion`, {
+        languages: ["latex"],
+        name: `CaTeX ${dict.charAt(0).toUpperCase}${dict.slice(1)} Completion`,
+        commandName: `catex.${dict}`,
+        triggers: [prefix],
+        dictionary: `defaults/${dict}s.json`,
+        renderMode: LaTeXExpander
+      });
+
+      if (typeof dic.dictionary === "string") {
+        dic.dictionary = context.asAbsolutePath(dic.dictionary);
+      } else {
+        dic.dictionary = dic.dictionary.map(i => {
+          if (typeof i === "string") {
+            return context.asAbsolutePath(i);
+          } else {
+            return i;
+          }
+        });
+      }
+      api.registerInputMethod(dic);
+    }
+    register_input_method("greek", ":");
+    register_input_method("image", ";");
+    register_input_method("font", "@");
+
     function register_completer(dict: string, type: CommandType) {
       let name = `${dict.charAt(0).toUpperCase}${dict.slice(1)}`;
       const items: CommandDictionary = conf.get(`catex.dictionary.${dict}`, {
