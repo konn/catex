@@ -14,9 +14,11 @@
 
 ## DEMOs
 
-### Image and Greek completion for LaTeX
+### Image and Greek Completion
 
 ![GIF Anime](images/image-and-greek.gif)
+
+### Image Completion, manually invoked for surrounding
 
 ![GIF Anime](images/image-invoked.gif)
 
