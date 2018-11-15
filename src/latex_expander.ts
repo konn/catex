@@ -1,6 +1,6 @@
 import { Expander, InputMethodItem } from "./generic-input-method/input_method";
 import { CommandType, ArgSpec, ArgKind, LaTeXScope } from "./latex_syntax";
-import { SnippetString } from "vscode";
+import { SnippetString, workspace, window } from "vscode";
 
 export const LaTeXExpander: Expander = i =>
   new LaTeXInputMethodItem(i as LaTeXInputMethodItemConfig);
@@ -35,19 +35,23 @@ export class LaTeXInputMethodItem implements InputMethodItem {
    */
   public toSnippet(selection: string = ""): SnippetString {
     let rendered = "";
+    const tabSize = workspace.getConfiguration().get("editor.tabSize", 2);
+    const spaces = Array(tabSize)
+      .fill(" ")
+      .join("");
     let args = (this.args || []).map(render_argspec(selection)).join("");
 
     if (this.type === CommandType.Environment) {
       if (selection) {
         rendered = [
           `\\begin{${this.body}}${args}`,
-          `  ${selection}$0`,
+          `${spaces}${selection}$0`,
           `\\end{${this.body}}`
         ].join("\n");
       } else {
         rendered = [
           `\\begin{${this.body}}${args}`,
-          "  $0",
+          `${spaces}$0`,
           `\\end{${this.body}}`
         ].join("\n");
       }
