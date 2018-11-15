@@ -18,7 +18,7 @@ export declare class InputMethod implements CompletionItemProvider {
   renderMode: Expander;
   commandName?: string;
   private completionItems;
-  private dictionary;
+  public dictionary: InputMethodItem[];
   constructor(context: ExtensionContext, conf: InputMethodConf);
   provideCompletionItems(
     document: TextDocument,
@@ -47,48 +47,12 @@ export interface InputMethodItem extends ToSnippet {
   body: string;
   description?: string;
 }
-export enum CommandType {
-  Maketitle = "maketitle",
-  Environment = "environment",
-  Section = "section",
-  Text = "text",
-  Large = "large"
-}
-export interface ArgSpec {
-  kind: ArgKind;
-  candidates?: string[];
-}
-export declare enum ArgKind {
-  Fixed = "fixed",
-  Optional = "optional"
-}
-export interface LaTeXInputMethodItemConfig {
-  label: string;
-  body: string;
-  filterText: string;
-  description: string;
-  type?: CommandType;
-  args?: ArgSpec[];
-}
-export declare class LaTeXInputMethodItem implements InputMethodItem {
-  label: string;
-  body: string;
-  description: string;
-  type?: CommandType;
-  args?: ArgSpec[];
-  constructor(item: LaTeXInputMethodItemConfig);
-  /**
-   * render
-   */
-  toSnippet(selection?: string): SnippetString;
-}
 export interface ToSnippet {
   toSnippet(selection?: string): SnippetString;
 }
 export declare enum RenderMode {
   Snippet = "snippet",
-  String = "string",
-  LaTeXCommand = "latex"
+  String = "string"
 }
 export interface RenderableQuickPickItem extends QuickPickItem, ToSnippet {}
 export interface InputMethodConf {
@@ -98,6 +62,11 @@ export interface InputMethodConf {
   dictionary: (InputMethodItemConfig | string)[] | string;
   renderMode?: RenderMode | string | Expander;
   commandName?: string;
+  showQuickPick?: (
+    im: InputMethod,
+    editor: TextEditor,
+    forced?: boolean
+  ) => any;
 }
 export interface InputMethodItemConfig {
   label: string;
@@ -108,5 +77,3 @@ export interface InputMethodItemConfig {
 export declare type Expander = (conf: InputMethodItemConfig) => InputMethodItem;
 export declare const SimpleExpander: Expander;
 export declare const RawStringExpander: Expander;
-export declare const LaTeXExpander: Expander;
-export {};

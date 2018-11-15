@@ -1,12 +1,9 @@
 "use strict";
-import {
-  ArgSpec,
-  ArgKind,
-  LaTeXInputMethodItemConfig,
-  CommandType
-} from "./generic-input-method/input_method";
+import { ArgSpec, ArgKind, CommandType } from "./latex_syntax";
 import { ExtensionContext } from "vscode";
 import { readFileSync } from "fs";
+import { LaTeXInputMethodItemConfig } from "./latex_expander";
+
 export interface IncludeDirective {
   include: string;
 }
@@ -64,7 +61,7 @@ export function cmdToLaTeXConf(
         label: cmd,
         body: cmd,
         filterText: cmd,
-        description: cmd,
+        description: preview(cmdType, cmd),
         type: cmdType
       };
     } else {
@@ -72,7 +69,7 @@ export function cmdToLaTeXConf(
         label: cmd.name,
         body: cmd.name,
         type: cmdType,
-        description: cmd.name,
+        description: preview(cmdType, cmd.name),
         filterText: cmd.name,
         args: cmd.args ? cmd.args.map(defToSpec) : undefined
       };
@@ -112,7 +109,7 @@ function toLarge(large: string): LaTeXInputMethodItemConfig {
     label: large,
     filterText: large,
     body: large,
-    description: `{\\${large} ..}`
+    description: `{\\${large} ...}`
   };
 }
 

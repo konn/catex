@@ -37,7 +37,7 @@
       {
         "title": "CaTeX completion configuration",
         "properties": {
-          "catex.dictionary.section": {
+          "catex.section.dictionary": {
             "title": "Section Dictionary",
             "markdownDescription": "CaTeX completion dictionary for `\\section{..}`-like commands",
             "oneOf": [
@@ -127,7 +127,7 @@
               "include": "defaults/sections.json"
             }
           },
-          "catex.dictionary.environment": {
+          "catex.environment.dictionary": {
             "title": "Environment Dictionary",
             "description": "CaTeX completion dictionary for environments",
             "default": {
@@ -142,7 +142,7 @@
               }
             ]
           },
-          "catex.dictionary.maketitle": {
+          "catex.maketitle.dictionary": {
             "title": "Maketitle Dictionary",
             "markdownDescription": "CaTeX completion dictionary for `\\maketitle`-like commands",
             "default": {
@@ -157,7 +157,7 @@
               }
             ]
           },
-          "catex.dictionary.large": {
+          "catex.large.dictionary": {
             "title": "\\Large-like Dictionary",
             "markdownDescription": "CaTeX completion dictionary for `{\\Large }`-like commands",
             "default": {
