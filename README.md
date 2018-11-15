@@ -11,6 +11,6 @@
 
 ## TODOs
 
-- Automatic registration of missing completions
 - Adds GIF demos
+- Contextual completion based on grammatical scopes
 - Release to Marketplace
