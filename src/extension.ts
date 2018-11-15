@@ -35,10 +35,6 @@ export class CaTeXException implements Error {
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: ExtensionContext) {
-  const editor = window.activeTextEditor;
-  if (editor) {
-    commands.executeCommand("extension.catex.test.qphook", editor);
-  }
   const gim = extensions.getExtension("mr-konn.generic-input-method");
   if (!gim) {
     throw new CaTeXException(
