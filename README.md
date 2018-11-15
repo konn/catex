@@ -22,6 +22,6 @@
 
 ## TODOs
 
-- Adds GIF demos
+- Prefixed `\begin-\end` completions
 - Contextual completion based on grammatical scopes
 - Release to Marketplace
