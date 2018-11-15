@@ -7,6 +7,7 @@ export const LaTeXExpander: Expander = i =>
 export interface LaTeXInputMethodItemConfig {
   label: string;
   body: string;
+  contentPrefix?: string;
   filterText: string;
   description: string;
   type?: CommandType;
@@ -21,6 +22,7 @@ export class LaTeXInputMethodItem implements InputMethodItem {
   public type?: CommandType;
   public args?: ArgSpec[];
   public scope?: LaTeXScope;
+  public contentPrefix: string;
   constructor(item: LaTeXInputMethodItemConfig) {
     this.label = item.label;
     this.body = item.body;
@@ -28,6 +30,7 @@ export class LaTeXInputMethodItem implements InputMethodItem {
     this.type = item.type;
     this.args = item.args;
     this.scope = item.scope;
+    this.contentPrefix = item.contentPrefix || "";
   }
 
   /**
@@ -35,7 +38,13 @@ export class LaTeXInputMethodItem implements InputMethodItem {
    */
   public toSnippet(selection: string = ""): SnippetString {
     let rendered = "";
-    const tabSize = workspace.getConfiguration().get("editor.tabSize", 2);
+    let tabSize = 1;
+    const editor = window.activeTextEditor;
+    if (editor) {
+      tabSize = workspace
+        .getConfiguration("editor", editor.document.uri)
+        .get("tabSize", 1);
+    }
     const spaces = Array(tabSize)
       .fill(" ")
       .join("");
@@ -45,25 +54,28 @@ export class LaTeXInputMethodItem implements InputMethodItem {
       if (selection) {
         rendered = [
           `\\begin{${this.body}}${args}`,
-          `${spaces}${selection}$0`,
+          `${spaces}${this.contentPrefix}${selection}$0`,
           `\\end{${this.body}}`
         ].join("\n");
       } else {
         rendered = [
           `\\begin{${this.body}}${args}`,
-          `${spaces}$0`,
+          `${spaces}${this.contentPrefix}$0`,
           `\\end{${this.body}}`
         ].join("\n");
       }
     } else if (this.type === CommandType.Large) {
       if (selection) {
-        rendered = `{\\${this.body} ${selection}}`;
+        rendered = `{\\${this.body} ${this.contentPrefix}${selection}}`;
       } else {
-        rendered = `{\\${this.body} $1}`;
+        rendered = `{\\${this.body} ${this.contentPrefix}$1}`;
       }
     } else if (this.type === CommandType.Maketitle) {
       rendered = `\\${this.body}`;
     } else if (this.type === CommandType.Section) {
+      if (selection) {
+        selection = `${this.contentPrefix}${selection}`;
+      }
       if (!this.args || this.args.length === 0) {
         if (selection.length === 0) {
           rendered = `\\${this.body}{$1}`;
@@ -106,3 +118,5 @@ function render_argspec(
     return rendered;
   };
 }
+
+// function argSpecToSnippet(spec: ArgSpec): SnippetString {}

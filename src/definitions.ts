@@ -1,5 +1,5 @@
 "use strict";
-import { ArgSpec, ArgKind, CommandType } from "./latex_syntax";
+import { ArgSpec, ArgKind, CommandType, LaTeXScope } from "./latex_syntax";
 import { ExtensionContext } from "vscode";
 import { readFileSync } from "fs";
 import { LaTeXInputMethodItemConfig } from "./latex_expander";
@@ -13,6 +13,8 @@ export type ArgDef = ArgSpec | ArgKind;
 export interface CommandDefinition {
   name: string;
   args?: ArgDef[];
+  contentPrefix?: string;
+  scope?: LaTeXScope;
 }
 
 export type Command = string | CommandDefinition;
@@ -71,7 +73,9 @@ export function cmdToLaTeXConf(
         type: cmdType,
         description: preview(cmdType, cmd.name),
         filterText: cmd.name,
-        args: cmd.args ? cmd.args.map(defToSpec) : undefined
+        args: cmd.args ? cmd.args.map(defToSpec) : undefined,
+        contentPrefix: cmd.contentPrefix,
+        scope: cmd.scope
       };
     }
   }
