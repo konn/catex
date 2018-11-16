@@ -157,7 +157,7 @@ export class RegistererItem implements RenderableQuickPickItem {
     if (noArgs || specStr) {
       let args: ArgSpec[] | undefined;
       if (typeof specStr === "string") {
-        if (!noArgs && specStr.length > 0) {
+        if (!noArgs && (<string>specStr).length > 0) {
           args = [];
           let match: RegExpExecArray | null;
           const itemRe = /\{[^\{\}\[\]]*?\}|\[[^\{\}\[\]]*?\]/g;
