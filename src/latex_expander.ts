@@ -48,7 +48,7 @@ export class LaTeXInputMethodItem implements InputMethodItem {
     const spaces = Array(tabSize)
       .fill(" ")
       .join("");
-    let args = (this.args || []).map(render_argspec(selection)).join("");
+    let args = renderArgs(selection, this.args || []).value;
 
     if (this.type === CommandType.Environment) {
       if (selection) {
@@ -94,29 +94,43 @@ export class LaTeXInputMethodItem implements InputMethodItem {
   }
 }
 
-/**
- * render_argspec
- */
-function render_argspec(
-  selection: string
-): (spec: ArgSpec, i: number) => string {
-  return function(value: ArgSpec, index: number): string {
-    let rendered = "";
-    let cands = value.candidates;
-    if (cands) {
-      rendered = `\${${index}|${cands.join(",")}|}`;
-    } else if (selection.length > 0 && index === 0) {
-      rendered = selection;
+export function renderArgs(selection: string, specs: ArgSpec[]): SnippetString {
+  let rendered = new SnippetString();
+  let i = 0;
+  let selRemains: boolean = selection.length > 0;
+  const bodyIdx = specs.some(i => i.body || false)
+    ? null
+    : specs.findIndex(i => i.kind === ArgKind.Fixed);
+  specs.forEach((value, pos) => {
+    if (selRemains && (value.body || pos === bodyIdx)) {
+      rendered.appendText(`{${selection}}`);
     } else {
-      rendered = `\${${index}}`;
+      const mk = (inner: SnippetString) => {
+        let cands = value.candidates;
+        if (cands) {
+          i += 1;
+          inner.value += `\${${i}|`;
+          inner.appendText(cands.join(","));
+          inner.value += "|}";
+        } else if (value.placeholder) {
+          inner.appendText(value.placeholder);
+        }
+      };
+      if (value.kind === ArgKind.Fixed) {
+        i += 1;
+        rendered.appendText("{");
+        rendered.appendPlaceholder(mk, i);
+        rendered.appendText("}");
+      } else if (value.kind === ArgKind.Optional) {
+        i += 1;
+        rendered.appendPlaceholder(inner => {
+          i += 1;
+          inner.appendText("[");
+          inner.appendPlaceholder(mk, i);
+          inner.appendText("]");
+        }, i);
+      }
     }
-    if (value.kind === ArgKind.Fixed) {
-      rendered = `{${rendered}}`;
-    } else if (value.kind === ArgKind.Optional) {
-      rendered = `[${rendered}]`;
-    }
-    return rendered;
-  };
+  });
+  return rendered;
 }
-
-// function argSpecToSnippet(spec: ArgSpec): SnippetString {}

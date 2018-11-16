@@ -143,8 +143,9 @@ export class RegistererItem implements RenderableQuickPickItem {
     const specStr: String | undefined = noArgs
       ? ""
       : await window.showInputBox({
-          prompt: "Enter argument spec:",
-          placeHolder: "{}[]{}",
+          prompt: "Enter argument spec (start with `!` for possible body):",
+
+          placeHolder: "{default}[!body]{}",
           validateInput: input => {
             if (re.test(input)) {
               return;
@@ -164,14 +165,20 @@ export class RegistererItem implements RenderableQuickPickItem {
           while ((match = itemRe.exec(specStr))) {
             const mbody = match[0].slice(1, match[0].length - 1);
             let placeholder: string | undefined;
+            let body: boolean | undefined;
             if (mbody.length > 1) {
-              placeholder = mbody;
+              if (mbody.charAt(0) === "!") {
+                body = true;
+                placeholder = mbody.slice(1);
+              } else {
+                placeholder = mbody;
+              }
             }
             if (match[0].charAt(0) === "{") {
-              args.push({ kind: ArgKind.Fixed, placeholder });
+              args.push({ kind: ArgKind.Fixed, placeholder, body });
             } else {
               let placeholder: string | undefined;
-              args.push({ kind: ArgKind.Optional, placeholder });
+              args.push({ kind: ArgKind.Optional, placeholder, body });
             }
           }
         } else if (this.kind === CommandType.Section) {

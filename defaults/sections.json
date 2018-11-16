@@ -73,11 +73,18 @@
   },
   {
     "name": "newenvironment",
-    "args": ["fixed", "fixed", "fixed"]
+    "args": [
+      { "kind": "fixed", "placeholder": "MyEnv" },
+      { "kind": "fixed", "placeholder": "BEFORE" },
+      { "kind": "fixed", "placeholder": "AFTER" }
+    ]
   },
   {
     "name": "newtheorem",
-    "args": ["fixed", "fixed"]
+    "args": [
+      { "kind": "fixed", "placeholder": "name" },
+      { "kind": "fixed", "placeholder": "Prefix" }
+    ]
   },
   "cline",
   "framebox",
@@ -103,7 +110,11 @@
   },
   {
     "name": "multicolumn",
-    "args": ["fixed", "fixed", "fixed"]
+    "args": [
+      { "kind": "fixed", "placeholder": "2" },
+      { "kind": "fixed", "placeholder": "|c|" },
+      { "kind": "fixed", "placeholder": "content", "body": true }
+    ]
   },
   "shortstack",
   {
@@ -125,7 +136,7 @@
     "name": "frac",
     "args": ["fixed", "fixed"]
   },
-  "sqrt",
+  { "name": "sqrt", "args": ["optional", "fixed"] },
   "mathrm",
   "mathbf",
   "mathit",
@@ -141,7 +152,10 @@
   "framesubtitle",
   {
     "name": "documentclass",
-    "args": ["optional", "fixed"]
+    "args": [
+      { "kind": "optional", "placeholder": "a4paper" },
+      { "kind": "fixed", "placeholder": "article" }
+    ]
   },
   {
     "name": "usepackage",

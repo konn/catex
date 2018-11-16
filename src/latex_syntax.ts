@@ -7,6 +7,7 @@ export interface ArgSpec {
   kind: ArgKind;
   candidates?: string[];
   placeholder?: string;
+  body?: boolean;
 }
 
 export enum CommandType {

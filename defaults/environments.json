@@ -9,9 +9,9 @@
   { "name": "itemize", "contentPrefix": "\\item " },
   { "name": "description", "contentPrefix": "\\item[] " },
   "list",
-  "tabular",
+  { "name": "tabular", "args": [{ "kind": "fixed", "placeholder": "c" }] },
   "tabular*",
-  "table",
+  { "name": "tabular", "args": [{ "kind": "optional", "placeholder": "hb" }] },
   "tabbing",
   "titlepage",
   "sloppypar",
@@ -28,15 +28,15 @@
   "aligned",
   {
     "name": "alignat",
-    "args": ["fixed"]
+    "args": [{ "kind": "fixed", "placeholder": "2" }]
   },
   {
     "name": "alignat*",
-    "args": ["fixed"]
+    "args": [{ "kind": "fixed", "placeholder": "2" }]
   },
   {
     "name": "alignedat*",
-    "args": ["fixed"]
+    "args": [{ "kind": "fixed", "placeholder": "2" }]
   },
   "cases",
   "gather",
@@ -63,7 +63,7 @@
   "boxnote",
   "shadebox",
   "alltt",
-  "multicols",
+  { "name": "multicols", "args": [{ "kind": "fixed", "placeholder": 2 }] },
   "breakbox",
   "numcases",
   "subnumcases"
