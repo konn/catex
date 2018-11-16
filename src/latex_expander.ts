@@ -48,9 +48,8 @@ export class LaTeXInputMethodItem implements InputMethodItem {
     const spaces = Array(tabSize)
       .fill(" ")
       .join("");
-    let args = renderArgs(selection, this.args || []).value;
-
     if (this.type === CommandType.Environment) {
+      let args = renderArgs("", this.args || []).value;
       if (selection) {
         rendered = [
           `\\begin{${this.body}}${args}`,
@@ -65,6 +64,7 @@ export class LaTeXInputMethodItem implements InputMethodItem {
         ].join("\n");
       }
     } else if (this.type === CommandType.Large) {
+      let args = renderArgs("", this.args || []).value;
       if (selection) {
         rendered = `{\\${this.body}${args} ${this.contentPrefix}${selection}}`;
       } else {
@@ -76,6 +76,7 @@ export class LaTeXInputMethodItem implements InputMethodItem {
       if (selection) {
         selection = `${this.contentPrefix}${selection}`;
       }
+      let args = renderArgs(selection, this.args || []).value;
       if (!this.args || this.args.length === 0) {
         if (selection.length === 0) {
           rendered = `\\${this.body}{$1}`;
@@ -88,6 +89,8 @@ export class LaTeXInputMethodItem implements InputMethodItem {
     } else if (this.type === CommandType.Text) {
       rendered = this.body;
     } else {
+      let args = renderArgs(selection, this.args || []).value;
+
       rendered = `\\${this.body}${args}`;
     }
     return new SnippetString(rendered);
