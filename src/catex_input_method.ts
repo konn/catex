@@ -137,9 +137,7 @@ export class RegistererItem implements RenderableQuickPickItem {
     const conf: WorkspaceConfiguration = workspace.getConfiguration();
     const re = /^(\{[^\{\}\[\]]*?\}|\[[^\{\}\[\]]*?\])*$/;
     const noArgs =
-      this.kind === CommandType.Maketitle ||
-      this.kind === CommandType.Large ||
-      this.kind === CommandType.Text;
+      this.kind === CommandType.Maketitle || this.kind === CommandType.Text;
     const specStr: String | undefined = noArgs
       ? undefined
       : await window.showInputBox({

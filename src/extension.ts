@@ -8,12 +8,7 @@ import {
   extensions,
   ExtensionContext
 } from "vscode";
-import {
-  CommandDictionary,
-  cmdDicToLaTeXItemConfs,
-  LargeDictionary,
-  largeDicToLaTeXItemConfs
-} from "./definitions";
+import { CommandDictionary, cmdDicToLaTeXItemConfs } from "./definitions";
 import { InputMethodConf } from "./generic-input-method/input_method";
 import GenericInputMethodAPI from "./generic-input-method/api";
 import { CommandType } from "./latex_syntax";
@@ -92,26 +87,7 @@ export function activate(context: ExtensionContext) {
     register_completer("section", CommandType.Section);
     register_completer("environment", CommandType.Environment);
     register_completer("maketitle", CommandType.Maketitle);
-
-    const items: LargeDictionary = conf.get(`catex.dictionary.large`, {
-      include: "defaults/larges.json"
-    });
-    const dic = largeDicToLaTeXItemConfs(context, items);
-    const imConf: InputMethodConf = {
-      name: `CaTeX Large Completer`,
-      commandName: `catex.large`,
-      languages: ["latex"],
-      triggers: [],
-      dictionary: dic,
-      renderMode: LaTeXExpander
-    };
-    const IM = new CaTeXInputMethod(
-      "large",
-      CommandType.Large,
-      context,
-      imConf
-    );
-    api.registerInputMethod(IM);
+    register_completer("large", CommandType.Large);
   });
 }
 

@@ -22,7 +22,6 @@ export type Command = string | CommandDefinition;
 export type CommandDictionary =
   | IncludeDirective
   | (IncludeDirective | Command)[];
-export type LargeDictionary = IncludeDirective | (IncludeDirective | string)[];
 
 function isIncludeDirective<T>(i: IncludeDirective | T): i is IncludeDirective {
   return (<IncludeDirective>i).include !== undefined;
@@ -103,41 +102,6 @@ export function cmdDicToLaTeXItemConfs(
   return items;
 }
 
-function toLarge(large: string): LaTeXInputMethodItemConfig {
-  return {
-    type: CommandType.Large,
-    label: large,
-    filterText: large,
-    body: large,
-    description: `{\\${large} ...}`
-  };
-}
-
 function parseDefault<T>(context: ExtensionContext, path: string): T {
   return JSON.parse(readFileSync(context.asAbsolutePath(path)).toString());
-}
-
-export function largeDicToLaTeXItemConfs(
-  context: ExtensionContext,
-  is: LargeDictionary
-): LaTeXInputMethodItemConfig[] {
-  const items: LaTeXInputMethodItemConfig[] = new Array();
-  if (isIncludeDirective(is)) {
-    const os: string[] = parseDefault(context, is.include);
-    os.forEach(cmd => {
-      items.push(toLarge(cmd));
-    });
-  } else {
-    is.forEach(i => {
-      if (isIncludeDirective(i)) {
-        const is: string[] = parseDefault(context, i.include);
-        is.forEach(cmd => {
-          items.push(toLarge(cmd));
-        });
-      } else {
-        items.push(toLarge(i));
-      }
-    });
-  }
-  return items;
 }

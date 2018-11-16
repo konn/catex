@@ -66,9 +66,9 @@ export class LaTeXInputMethodItem implements InputMethodItem {
       }
     } else if (this.type === CommandType.Large) {
       if (selection) {
-        rendered = `{\\${this.body} ${this.contentPrefix}${selection}}`;
+        rendered = `{\\${this.body}${args} ${this.contentPrefix}${selection}}`;
       } else {
-        rendered = `{\\${this.body} ${this.contentPrefix}$1}`;
+        rendered = `{\\${this.body}${args} ${this.contentPrefix}$1}`;
       }
     } else if (this.type === CommandType.Maketitle) {
       rendered = `\\${this.body}`;
