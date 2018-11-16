@@ -271,6 +271,14 @@
                             ]
                           },
                           "optional": true
+                        },
+                        "body": {
+                          "type": "boolean",
+                          "default": false
+                        },
+                        "placeholder": {
+                          "type": "string",
+                          "optional": true
                         }
                       },
                       "required": [
@@ -326,20 +334,7 @@
                 "$ref": "#include-directive"
               },
               {
-                "title": "Command names and/or includes",
-                "description": "A list of commands or include-directives",
-                "type": "array",
-                "items": {
-                  "oneOf": [
-                    {
-                      "type": "string",
-                      "minLength": 1
-                    },
-                    {
-                      "$ref": "#include-directive"
-                    }
-                  ]
-                }
+                "$ref": "#command-definition-list"
               }
             ]
           }

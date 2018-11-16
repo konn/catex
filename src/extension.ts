@@ -69,9 +69,10 @@ export function activate(context: ExtensionContext) {
 
     function register_completer(dict: string, type: CommandType) {
       let name = `${dict.charAt(0).toUpperCase}${dict.slice(1)}`;
-      const items: CommandDictionary = conf.get(`catex.dictionary.${dict}`, {
+      const items: CommandDictionary = conf.get(`catex.${dict}.dictionary`, {
         include: `defaults/${dict}s.json`
       });
+
       const dic = cmdDicToLaTeXItemConfs(context, type, items);
       const imConf: InputMethodConf = {
         name: `CaTeX ${name} Completer`,

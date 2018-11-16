@@ -18,7 +18,7 @@ import {
 } from "vscode";
 import { CommandType, ArgSpec, ArgKind } from "./latex_syntax";
 import { LaTeXInputMethodItem, LaTeXExpander } from "./latex_expander";
-import { preview, CommandDefinition } from "./definitions";
+import { preview, CommandDefinition, CommandDictionary } from "./definitions";
 
 export default class CaTeXInputMethod implements InputMethodConf {
   public name: string;
@@ -202,7 +202,7 @@ export class RegistererItem implements RenderableQuickPickItem {
       const curDic: any = conf.get(`catex.${this.dictionary}.dictionary`, [
         { include: `defaults/${this.dictionary}s.json` }
       ]);
-      let dic: any[];
+      let dic: CommandDictionary[];
       if (curDic instanceof Array) {
         dic = curDic.concat([itemDef]);
       } else {

@@ -69,7 +69,7 @@ export class LaTeXInputMethodItem implements InputMethodItem {
       if (selection) {
         rendered = `{\\${this.body}${args} ${this.contentPrefix}${selection}}`;
       } else {
-        rendered = `{\\${this.body}${args} ${this.contentPrefix}$${stop}}`;
+        rendered = `{\\${this.body}${args} ${this.contentPrefix}$${stop + 1}}`;
       }
     } else if (this.type === CommandType.Maketitle) {
       rendered = `\\${this.body}`;
