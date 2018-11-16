@@ -60,10 +60,8 @@ Completion and registration:
 
 ## TODOs
 
-- More Demos
-- Unifying dictionaries of snippet completion and image-completions
-- Prefixed `\begin-\end` completions
-- Contextual completion based on grammatical scopes
-- Release to Marketplace
-- Package name completions
 - Supports `<>` and `()`-style arguments for commands.
+- Prefixed `\begin-\end` completions
+- Package name completions
+- Contextual completion based on grammatical scopes
+- (Unifying dictionaries of snippet completion and image-completions)
