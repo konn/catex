@@ -154,7 +154,7 @@ export class RegistererItem implements RenderableQuickPickItem {
             }
           }
         });
-    if (noArgs || specStr) {
+    if (noArgs || specStr !== undefined) {
       let args: ArgSpec[] | undefined;
       if (typeof specStr === "string") {
         if (!noArgs && (<string>specStr).length > 0) {
