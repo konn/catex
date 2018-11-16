@@ -177,7 +177,6 @@ export class RegistererItem implements RenderableQuickPickItem {
             if (match[0].charAt(0) === "{") {
               args.push({ kind: ArgKind.Fixed, placeholder, body });
             } else {
-              let placeholder: string | undefined;
               args.push({ kind: ArgKind.Optional, placeholder, body });
             }
           }
