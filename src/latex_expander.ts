@@ -49,7 +49,7 @@ export class LaTeXInputMethodItem implements InputMethodItem {
       .fill(" ")
       .join("");
     if (this.type === CommandType.Environment) {
-      let args = renderArgs("", this.args || []).value;
+      let args = renderArgs("", this.args || [])[0].value;
       if (selection) {
         rendered = [
           `\\begin{${this.body}}${args}`,
@@ -64,11 +64,12 @@ export class LaTeXInputMethodItem implements InputMethodItem {
         ].join("\n");
       }
     } else if (this.type === CommandType.Large) {
-      let args = renderArgs("", this.args || []).value;
+      let [snip, stop] = renderArgs("", this.args || []);
+      let args = snip.value;
       if (selection) {
         rendered = `{\\${this.body}${args} ${this.contentPrefix}${selection}}`;
       } else {
-        rendered = `{\\${this.body}${args} ${this.contentPrefix}$1}`;
+        rendered = `{\\${this.body}${args} ${this.contentPrefix}$${stop}}`;
       }
     } else if (this.type === CommandType.Maketitle) {
       rendered = `\\${this.body}`;
@@ -76,7 +77,7 @@ export class LaTeXInputMethodItem implements InputMethodItem {
       if (selection) {
         selection = `${this.contentPrefix}${selection}`;
       }
-      let args = renderArgs(selection, this.args || []).value;
+      let args = renderArgs(selection, this.args || [])[0].value;
       if (!this.args || this.args.length === 0) {
         if (selection.length === 0) {
           rendered = `\\${this.body}{$1}`;
@@ -89,7 +90,7 @@ export class LaTeXInputMethodItem implements InputMethodItem {
     } else if (this.type === CommandType.Text) {
       rendered = this.body;
     } else {
-      let args = renderArgs(selection, this.args || []).value;
+      let args = renderArgs(selection, this.args || [])[0].value;
 
       rendered = `\\${this.body}${args}`;
     }
@@ -97,7 +98,10 @@ export class LaTeXInputMethodItem implements InputMethodItem {
   }
 }
 
-export function renderArgs(selection: string, specs: ArgSpec[]): SnippetString {
+export function renderArgs(
+  selection: string,
+  specs: ArgSpec[]
+): [SnippetString, number] {
   let rendered = new SnippetString();
   let i = 0;
   let selRemains: boolean = selection.length > 0;
@@ -135,5 +139,5 @@ export function renderArgs(selection: string, specs: ArgSpec[]): SnippetString {
       }
     }
   });
-  return rendered;
+  return [rendered, i];
 }
