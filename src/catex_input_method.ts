@@ -141,7 +141,7 @@ export class RegistererItem implements RenderableQuickPickItem {
       this.kind === CommandType.Large ||
       this.kind === CommandType.Text;
     const specStr: String | undefined = noArgs
-      ? ""
+      ? undefined
       : await window.showInputBox({
           prompt: "Enter argument spec (start with `!` for possible body):",
 
@@ -154,7 +154,7 @@ export class RegistererItem implements RenderableQuickPickItem {
             }
           }
         });
-    if (specStr) {
+    if (noArgs || specStr) {
       let args: ArgSpec[] | undefined;
       if (typeof specStr === "string") {
         if (!noArgs && specStr.length > 0) {
