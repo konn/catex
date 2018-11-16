@@ -63,7 +63,7 @@
   "boxnote",
   "shadebox",
   "alltt",
-  { "name": "multicols", "args": [{ "kind": "fixed", "placeholder": 2 }] },
+  { "name": "multicols", "args": [{ "kind": "fixed", "placeholder": "2" }] },
   "breakbox",
   "numcases",
   "subnumcases"
