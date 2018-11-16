@@ -196,7 +196,7 @@ export class RegistererItem implements RenderableQuickPickItem {
       await editor.insertSnippet(item.toSnippet(selection));
 
       const itemDef: string | CommandDefinition =
-        this.kind === CommandType.Large || this.kind === CommandType.Maketitle
+        this.kind === CommandType.Maketitle
           ? this.label
           : { name: this.label, args };
       const curDic: any = conf.get(`catex.${this.dictionary}.dictionary`, [
