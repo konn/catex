@@ -1,6 +1,7 @@
 import { Expander, InputMethodItem } from "./generic-input-method/input_method";
 import { CommandType, ArgSpec, ArgKind, LaTeXScope } from "./latex_syntax";
 import { SnippetString, workspace, window } from "vscode";
+import EscapedString from "./escaped_string";
 
 export const LaTeXExpander: Expander = i =>
   new LaTeXInputMethodItem(i as LaTeXInputMethodItemConfig);
@@ -36,7 +37,8 @@ export class LaTeXInputMethodItem implements InputMethodItem {
   /**
    * render
    */
-  public toSnippet(selection: string = ""): SnippetString {
+  public toSnippet(sel: EscapedString = new EscapedString("")): SnippetString {
+    let selection = sel.value;
     let rendered = "";
     let tabSize = 1;
     const editor = window.activeTextEditor;

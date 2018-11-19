@@ -10,6 +10,7 @@ import {
   QuickPickItem,
   TextEditor
 } from "vscode";
+import EscapedString from "../escaped_string";
 export declare const Expanders: Map<string, Expander>;
 export declare class InputMethod implements CompletionItemProvider {
   name: string;
@@ -40,7 +41,7 @@ export declare class SimpleInputMethodItem implements ToSnippet {
   /**
    * toSnippet
    */
-  toSnippet(_?: string): SnippetString;
+  toSnippet(_?: EscapedString): SnippetString;
 }
 export interface InputMethodItem extends ToSnippet {
   label: string;
@@ -48,7 +49,7 @@ export interface InputMethodItem extends ToSnippet {
   description?: string;
 }
 export interface ToSnippet {
-  toSnippet(selection?: string): SnippetString;
+  toSnippet(selection?: EscapedString): SnippetString;
 }
 export declare enum RenderMode {
   Snippet = "snippet",

@@ -19,6 +19,7 @@ import {
 import { CommandType, ArgSpec, ArgKind } from "./latex_syntax";
 import { LaTeXInputMethodItem, LaTeXExpander } from "./latex_expander";
 import { preview, CommandDefinition, CommandDictionary } from "./definitions";
+import EscapedString from "./escaped_string";
 
 export default class CaTeXInputMethod implements InputMethodConf {
   public name: string;
@@ -47,7 +48,9 @@ export default class CaTeXInputMethod implements InputMethodConf {
     forced: boolean = false
   ) => {
     if (forced || this.languages.some(i => i === editor.document.languageId)) {
-      const selection = editor.document.getText(editor.selection);
+      const selection = new EscapedString(
+        editor.document.getText(editor.selection)
+      );
       const picks = await im.quickPickItems();
       const quickPick: QuickPick<
         RenderableQuickPickItem | RegistererItem
@@ -132,7 +135,7 @@ export class RegistererItem implements RenderableQuickPickItem {
   public async registerCompletion(
     im: InputMethod,
     editor: TextEditor,
-    selection?: string
+    selection?: EscapedString
   ) {
     const conf: WorkspaceConfiguration = workspace.getConfiguration();
     const re = /^(\{[^\{\}\[\]]*?\}|\[[^\{\}\[\]]*?\])*$/;
