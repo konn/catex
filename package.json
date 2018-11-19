@@ -2,7 +2,7 @@
   "name": "catex",
   "displayName": "CaTeX",
   "description": "YaTeX-like completions for LaTeX, based on Generic Input Method extension",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "mr-konn",
   "engines": {
     "vscode": "^1.29.0"
@@ -368,7 +368,8 @@
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "extensionDependencies": [
-    "mr-konn.generic-input-method"
+    "mr-konn.generic-input-method",
+    "torn4dom4n.latex-support"
   ],
   "devDependencies": {
     "typescript": "^2.6.1",
