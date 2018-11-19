@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.3]
+
+- Command argument prefix
+
 ## [0.0.2]
 
 - Adds an extension dependency to `latex-support`.
@@ -10,3 +14,4 @@
 ## [0.0.1]
 
 - Initial release
+- 

@@ -109,6 +109,7 @@ export function renderArgs(
     ? null
     : specs.findIndex(i => i.kind === ArgKind.Fixed);
   specs.forEach((value, pos) => {
+    const prefix = value.prefix || "";
     if (selRemains && (value.body || pos === bodyIdx)) {
       rendered.appendText(`{${selection}}`);
     } else {
@@ -116,7 +117,7 @@ export function renderArgs(
         let cands = value.candidates;
         if (cands) {
           i += 1;
-          inner.value += `\${${i}|`;
+          inner.value += `${prefix}\${${i}|`;
           inner.appendText(cands.join(","));
           inner.value += "|}";
         } else if (value.placeholder) {
@@ -125,14 +126,14 @@ export function renderArgs(
       };
       if (value.kind === ArgKind.Fixed) {
         i += 1;
-        rendered.appendText("{");
+        rendered.appendText("{" + prefix);
         rendered.appendPlaceholder(mk, i);
         rendered.appendText("}");
       } else if (value.kind === ArgKind.Optional) {
         i += 1;
         rendered.appendPlaceholder(inner => {
           i += 1;
-          inner.appendText("[");
+          inner.appendText("[" + prefix);
           inner.appendPlaceholder(mk, i);
           inner.appendText("]");
         }, i);

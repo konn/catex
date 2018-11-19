@@ -5,6 +5,7 @@ export enum ArgKind {
 
 export interface ArgSpec {
   kind: ArgKind;
+  prefix?: string;
   candidates?: string[];
   placeholder?: string;
   body?: boolean;

@@ -65,11 +65,11 @@
   },
   {
     "name": "newcommand",
-    "args": ["fixed", "optional", "fixed"]
+    "args": [{ "kind": "fixed", "prefix": "\\" }, "optional", "fixed"]
   },
   {
     "name": "renewcommand",
-    "args": ["fixed", "fixed"]
+    "args": [{ "kind": "fixed", "prefix": "\\" }, "fixed"]
   },
   {
     "name": "newenvironment",
