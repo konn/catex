@@ -58,6 +58,14 @@ Completion and registration:
 
 ![GIF Anime](images/maketitle-completion.gif)
 
+## Recommendation for Other Extension
+
+James Yu's [LaTeX Workshop] extension comes with rich complementary features such as auto-typesetting, SyncTeX support, and jump between corresponding `\begin` and `end`, etc.
+Although it collides with the <kbd>@</kbd> completion for math fonts, the author strongly recommend to install LaTeX Workshop as well.
+To be honest, CaTeX was designed to fill a gap between LaTeX Workshop and YaTeX.
+
+[LaTeX Workshop]: https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop
+
 ## TODOs
 
 - Supports `<>` and `()`-style arguments for commands.
