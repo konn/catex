@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.5]
+
+- Escapes "\" in selection string.
+
 ## [0.0.4]
 
 - Sanitises selection strings for command arguments;
