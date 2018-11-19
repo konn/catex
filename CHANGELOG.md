@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.0.4]
+
+- Sanitises selection strings for command arguments;
+  surrounding commands can now treat inline maths correctly.
+
 ## [0.0.3]
 
 - Command argument prefix
@@ -14,4 +19,3 @@
 ## [0.0.1]
 
 - Initial release
-- 
