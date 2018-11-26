@@ -1,7 +1,7 @@
 # CaTeX (軽鳥／怪鳥) - YaTeX like completions for LaTeX in VSCode
 
-![Visual Studio Marketplace](https://img.shields.io/vscode-marketplace/v/mr-konn.catex.svg)
-![Visual Studio Marketplace](https://img.shields.io/vscode-marketplace/d/mr-konn.catex.svg)
+[![Visual Studio Marketplace](https://img.shields.io/vscode-marketplace/v/mr-konn.catex.svg)](https://marketplace.visualstudio.com/items?itemName=mr-konn.catex)
+[![Visual Studio Marketplace](https://img.shields.io/vscode-marketplace/d/mr-konn.catex.svg)](https://marketplace.visualstudio.com/items?itemName=mr-konn.catex)
 
 ## Functionalities
 
