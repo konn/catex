@@ -1,6 +1,20 @@
 # Change Log
 
+## [0.0.7]
+
+### Fixed
+
+- Fixes the bug that sometimes the on-line registration fails
+
+## [0.0.6] 2018-11-27
+
+### Fixed
+
+- Workaround for `event-stream` vulnerability
+
 ## [0.0.5]
+
+### Fixed
 
 - Escapes "\" in selection string.
 
