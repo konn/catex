@@ -202,14 +202,39 @@ export class RegistererItem implements RenderableQuickPickItem {
         this.kind === CommandType.Maketitle
           ? this.label
           : { name: this.label, args };
-      const curDic: any = conf.get(`catex.${this.dictionary}.dictionary`, [
+      const curConf = conf.inspect<CommandDictionary>(
+        `catex.${this.dictionary}.dictionary`
+      );
+      let curDic: CommandDictionary = [
         { include: `defaults/${this.dictionary}s.json` }
-      ]);
-      let dic: CommandDictionary[];
+      ];
+      if (curConf) {
+        switch (this.confTarget) {
+          case ConfigurationTarget.Global:
+            curDic = curConf.globalValue || curConf.defaultValue || curDic;
+            break;
+
+          case ConfigurationTarget.Workspace:
+            curDic =
+              curConf.workspaceValue ||
+              curConf.globalValue ||
+              curConf.defaultValue ||
+              curDic;
+            break;
+
+          case ConfigurationTarget.WorkspaceFolder:
+            curDic =
+              curConf.workspaceFolderValue ||
+              curConf.workspaceValue ||
+              curConf.globalValue ||
+              curConf.defaultValue ||
+              curDic;
+            break;
+        }
+      }
+      let dic: CommandDictionary = [];
       if (curDic instanceof Array) {
         dic = curDic.concat([itemDef]);
-      } else {
-        dic = [curDic, itemDef];
       }
       await conf.update(
         `catex.${this.dictionary}.dictionary`,
