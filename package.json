@@ -371,6 +371,9 @@
     "mr-konn.generic-input-method",
     "torn4dom4n.latex-support"
   ],
+  "dependencies": {
+    "event-stream": "3.3.4"
+  },
   "devDependencies": {
     "typescript": "^2.6.1",
     "vscode": "^1.1.21",
