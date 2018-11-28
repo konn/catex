@@ -68,6 +68,8 @@ export interface InputMethodConf {
     editor: TextEditor,
     forced?: boolean
   ) => any;
+  configurationName?: string;
+  onDidChangeConfiguration?: (config: any) => InputMethodItemConfig[];
 }
 export interface InputMethodItemConfig {
   label: string;

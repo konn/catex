@@ -1,8 +1,9 @@
 "use strict";
 import { ArgSpec, ArgKind, CommandType, LaTeXScope } from "./latex_syntax";
 import { ExtensionContext } from "vscode";
-import { readFileSync } from "fs";
 import { LaTeXInputMethodItemConfig } from "./latex_expander";
+import { parseJSON, uniquifyRightBiased } from "./utils";
+import { isString } from "util";
 
 export interface IncludeDirective {
   include: string;
@@ -80,28 +81,34 @@ export function cmdToLaTeXConf(
   }
 }
 
+export function expandDictionary(
+  context: ExtensionContext,
+  dicSeed: (string | LaTeXInputMethodItemConfig)[]
+): LaTeXInputMethodItemConfig[] {
+  return uniquifyRightBiased<LaTeXInputMethodItemConfig, string>(
+    dicSeed,
+    isString,
+    i => i.label,
+    s => parseJSON(context, s)
+  );
+}
+
 export function cmdDicToLaTeXItemConfs(
   context: ExtensionContext,
   cmdType: CommandType,
   is: CommandDictionary
 ): LaTeXInputMethodItemConfig[] {
-  const items: LaTeXInputMethodItemConfig[] = new Array();
-  if (isIncludeDirective(is)) {
-    const ls: Command[] = parseDefault(context, is.include);
-    ls.forEach(cmd => items.push(cmdToLaTeXConf(cmdType, cmd)));
-  } else {
-    is.forEach(i => {
-      if (isIncludeDirective(i)) {
-        const is: Command[] = parseDefault(context, i.include);
-        is.forEach(cmd => items.push(cmdToLaTeXConf(cmdType, cmd)));
-      } else {
-        items.push(cmdToLaTeXConf(cmdType, i));
-      }
-    });
+  while (isIncludeDirective(is)) {
+    is = parseJSON(context, is.include);
   }
+  const items: LaTeXInputMethodItemConfig[] = uniquifyRightBiased<
+    CommandDefinition | string,
+    IncludeDirective
+  >(
+    is,
+    isIncludeDirective,
+    i => (isString(i) ? i : i.name),
+    s => parseJSON(context, s.include)
+  ).map(i => cmdToLaTeXConf(cmdType, i));
   return items;
-}
-
-function parseDefault<T>(context: ExtensionContext, path: string): T {
-  return JSON.parse(readFileSync(context.asAbsolutePath(path)).toString());
 }

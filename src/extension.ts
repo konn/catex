@@ -28,7 +28,7 @@ export class CaTeXException implements Error {
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export function activate(context: ExtensionContext) {
+export async function activate(context: ExtensionContext) {
   const gim = extensions.getExtension("mr-konn.generic-input-method");
   if (!gim) {
     throw new CaTeXException(
@@ -37,59 +37,59 @@ export function activate(context: ExtensionContext) {
     );
   }
 
-  gim.activate().then((api: GenericInputMethodAPI) => {
-    const conf: WorkspaceConfiguration = workspace.getConfiguration();
-    api.registerExpander("latex", LaTeXExpander);
-    function register_input_method(dict: string, prefix: string) {
-      let dic: InputMethodConf = conf.get(`catex.${dict}-completion`, {
-        languages: ["latex"],
-        name: `CaTeX ${dict.charAt(0).toUpperCase}${dict.slice(1)} Completion`,
-        commandName: `catex.${dict}`,
-        triggers: [prefix],
-        dictionary: `defaults/${dict}s.json`,
-        renderMode: LaTeXExpander
+  const api: GenericInputMethodAPI = await gim.activate();
+  const conf: WorkspaceConfiguration = workspace.getConfiguration("catex");
+  api.registerExpander("latex", LaTeXExpander);
+  function register_input_method(dict: string, prefix: string) {
+    let dic: InputMethodConf = conf.get(`${dict}-completion`, {
+      languages: ["latex"],
+      name: `CaTeX ${dict.charAt(0).toUpperCase()}${dict.slice(1)} Completion`,
+      commandName: `catex.${dict}`,
+      triggers: [prefix],
+      dictionary: `defaults/${dict}s.json`,
+      renderMode: LaTeXExpander
+    });
+
+    if (typeof dic.dictionary === "string") {
+      dic.dictionary = context.asAbsolutePath(dic.dictionary);
+    } else {
+      dic.dictionary = dic.dictionary.map(i => {
+        if (typeof i === "string") {
+          return context.asAbsolutePath(i);
+        } else {
+          return i;
+        }
       });
-
-      if (typeof dic.dictionary === "string") {
-        dic.dictionary = context.asAbsolutePath(dic.dictionary);
-      } else {
-        dic.dictionary = dic.dictionary.map(i => {
-          if (typeof i === "string") {
-            return context.asAbsolutePath(i);
-          } else {
-            return i;
-          }
-        });
-      }
-      api.registerInputMethod(dic);
     }
-    register_input_method("greek", ":");
-    register_input_method("image", ";");
-    register_input_method("font", "@");
+    api.registerInputMethod(dic);
+  }
+  register_input_method("greek", ":");
+  register_input_method("image", ";");
+  register_input_method("font", "@");
 
-    function register_completer(dict: string, type: CommandType) {
-      let name = `${dict.charAt(0).toUpperCase}${dict.slice(1)}`;
-      const items: CommandDictionary = conf.get(`catex.${dict}.dictionary`, {
-        include: `defaults/${dict}s.json`
-      });
+  function register_completer(dict: string, type: CommandType) {
+    let name = `${dict.charAt(0).toUpperCase()}${dict.slice(1)}`;
+    const dictName = `${dict}.dictionary`;
+    const items: CommandDictionary = conf.get(dictName, {
+      include: `defaults/${dict}s.json`
+    });
 
-      const dic = cmdDicToLaTeXItemConfs(context, type, items);
-      const imConf: InputMethodConf = {
-        name: `CaTeX ${name} Completer`,
-        commandName: `catex.${dict}`,
-        languages: ["latex"],
-        triggers: [],
-        dictionary: dic,
-        renderMode: LaTeXExpander
-      };
-      const IM = new CaTeXInputMethod(dict, type, context, imConf);
-      api.registerInputMethod(IM);
-    }
-    register_completer("section", CommandType.Section);
-    register_completer("environment", CommandType.Environment);
-    register_completer("maketitle", CommandType.Maketitle);
-    register_completer("large", CommandType.Large);
-  });
+    const dic = cmdDicToLaTeXItemConfs(context, type, items);
+    const imConf: InputMethodConf = {
+      name: `CaTeX ${name} Completer`,
+      commandName: `catex.${dict}`,
+      languages: ["latex"],
+      triggers: [],
+      dictionary: dic,
+      renderMode: LaTeXExpander
+    };
+    const IM = new CaTeXInputMethod(dict, type, context, imConf);
+    api.registerInputMethod(IM);
+  }
+  register_completer("section", CommandType.Section);
+  register_completer("environment", CommandType.Environment);
+  register_completer("maketitle", CommandType.Maketitle);
+  register_completer("large", CommandType.Large);
 }
 
 // this method is called when your extension is deactivated

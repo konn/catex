@@ -2,7 +2,6 @@ import {
   InputMethodConf,
   InputMethod,
   RenderableQuickPickItem,
-  InputMethodItemConfig,
   RenderMode,
   Expander
 } from "./generic-input-method/input_method";
@@ -22,20 +21,28 @@ import {
   LaTeXExpander,
   LaTeXInputMethodItemConfig
 } from "./latex_expander";
-import { preview, CommandDefinition, CommandDictionary } from "./definitions";
+import {
+  preview,
+  CommandDefinition,
+  CommandDictionary,
+  cmdDicToLaTeXItemConfs,
+  expandDictionary
+} from "./definitions";
 import EscapedString from "./escaped_string";
-import * as Path from "path";
-import { readFileSync } from "fs";
-
-type LaTeXConf = string | (string | LaTeXInputMethodItemConfig)[];
+import { parseJSON } from "./utils";
 
 export default class CaTeXInputMethod implements InputMethodConf {
   public name: string;
   public languages: string[];
   public triggers: string[];
-  public dictionary: (InputMethodItemConfig | string)[] | string;
+  public dictionary: LaTeXInputMethodItemConfig[];
   public renderMode?: RenderMode | string | Expander;
   public commandName?: string;
+  public configurationName: string;
+  public onDidChangeConfiguration: (
+    config: CommandDictionary
+  ) => LaTeXInputMethodItemConfig[];
+
   constructor(
     private dictName: string,
     private kind: CommandType,
@@ -45,62 +52,22 @@ export default class CaTeXInputMethod implements InputMethodConf {
     this.name = conf.name;
     this.languages = conf.languages;
     this.triggers = conf.triggers;
-    if (typeof conf.dictionary === "string") {
-      this.dictionary = conf.dictionary;
-    } else {
-      const dicSet: Set<string> = new Set();
-      const dic: LaTeXInputMethodItemConfig[] = [];
-      let dicSeed = conf.dictionary;
-      let i: undefined | string | InputMethodItemConfig;
-      while ((i = dicSeed.pop())) {
-        if (typeof i === "string") {
-          dicSeed = dicSeed.concat(this.decodePath(context, i));
-        } else {
-          if (!dicSet.has(i.label)) {
-            dicSet.add(i.label);
-            dic.push(<LaTeXInputMethodItemConfig>i);
-          }
-        }
-      }
-      this.dictionary = dic;
+    while (typeof conf.dictionary === "string") {
+      conf.dictionary = parseJSON(context, conf.dictionary);
     }
+    let dicSeed = <(string | LaTeXInputMethodItemConfig)[]>conf.dictionary;
+    this.dictionary = expandDictionary(context, dicSeed);
+
     this.renderMode = LaTeXExpander;
     this.commandName = conf.commandName;
-  }
-
-  private decodePath(
-    cxt: ExtensionContext,
-    path: string
-  ): LaTeXInputMethodItemConfig[] {
-    let started: LaTeXConf = this.parseAny(cxt, path);
-    const items: LaTeXInputMethodItemConfig[] = [];
-    let seeds: (string | LaTeXInputMethodItemConfig)[];
-    while (typeof started === "string") {
-      started = this.parseAny(cxt, started);
-    }
-    seeds = started;
-
-    const labDic: Set<string> = new Set();
-    let i: undefined | string | LaTeXInputMethodItemConfig;
-    while ((i = seeds.pop())) {
-      if (typeof i === "string") {
-        let ref: LaTeXConf = this.parseAny(cxt, i);
-        while (typeof ref === "string") {
-          ref = this.parseAny(cxt, ref);
-        }
-        seeds = seeds.concat(ref);
-      } else if (!labDic.has(i.label)) {
-        labDic.add(i.label);
-        items.unshift(i);
-      }
-    }
-
-    return items;
-  }
-
-  private parseAny<T>(cxt: ExtensionContext, path: string): T {
-    path = Path.isAbsolute(path) ? path : cxt.asAbsolutePath(path);
-    return JSON.parse(readFileSync(path).toString());
+    const dictPath = `catex.${this.dictName}.dictionary`;
+    this.configurationName = dictPath;
+    this.onDidChangeConfiguration = val => {
+      const conf: CommandDictionary = val || {
+        include: `defaults/${this.dictName}s.json`
+      };
+      return cmdDicToLaTeXItemConfs(context, this.kind, conf);
+    };
   }
 
   public showQuickPick = async (
