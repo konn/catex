@@ -12,6 +12,10 @@
   - `{\Large }`-like completion (<kbd>C-c l</kbd>)
   - `\maketitle`-like completion (<kbd>C-c m</kbd>)
     - In any completion, you can automatically register unknown commands!
+- Automatic settings update;
+  right after you edit `settings.json` or workspace file,
+  other affected editors automatically reflects that change and
+  there is no need for reloading or restarting!
 
 [YaTeX]: https://yatex.org
 

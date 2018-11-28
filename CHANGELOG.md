@@ -1,6 +1,10 @@
 # Change Log
 
-## [0.0.7]
+## [0.0.7] - 2018-11-28
+
+### Added
+
+- Automatic settings update
 
 ### Fixed
 
