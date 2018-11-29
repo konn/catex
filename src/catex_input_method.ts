@@ -26,7 +26,9 @@ import {
   CommandDefinition,
   CommandDictionary,
   cmdDicToLaTeXItemConfs,
-  expandDictionary
+  expandDictionary,
+  appendToDictionary,
+  Command
 } from "./definitions";
 import EscapedString from "./escaped_string";
 import { parseJSON } from "./utils";
@@ -222,17 +224,16 @@ export class RegistererItem implements RenderableQuickPickItem {
         type: this.kind
       };
 
+      const DICTIONARY_NAME = `catex.${this.dictionary}.dictionary`;
       const item = new LaTeXInputMethodItem(itemConf);
       (<LaTeXInputMethodItem[]>im.dictionary).push(item);
       await editor.insertSnippet(item.toSnippet(selection));
 
-      const itemDef: string | CommandDefinition =
+      const itemDef: Command =
         this.kind === CommandType.Maketitle
           ? this.label
           : { name: this.label, args };
-      const curConf = conf.inspect<CommandDictionary>(
-        `catex.${this.dictionary}.dictionary`
-      );
+      const curConf = conf.inspect<CommandDictionary>(DICTIONARY_NAME);
       let curDic: CommandDictionary = [
         { include: `defaults/${this.dictionary}s.json` }
       ];
@@ -264,11 +265,22 @@ export class RegistererItem implements RenderableQuickPickItem {
       if (curDic instanceof Array) {
         dic = curDic.concat([itemDef]);
       }
-      await conf.update(
-        `catex.${this.dictionary}.dictionary`,
-        dic,
-        this.confTarget
-      );
+      dic = appendToDictionary(curDic, itemDef);
+      await conf.update(DICTIONARY_NAME, dic, this.confTarget);
+
+      if (curConf && curConf.workspaceFolderValue) {
+        await conf.update(
+          DICTIONARY_NAME,
+          appendToDictionary(curConf.workspaceFolderValue, itemDef),
+          ConfigurationTarget.WorkspaceFolder
+        );
+      } else if (curConf && curConf.workspaceValue) {
+        await conf.update(
+          DICTIONARY_NAME,
+          appendToDictionary(curConf.workspaceValue, itemDef),
+          ConfigurationTarget.Workspace
+        );
+      }
     }
   }
 }

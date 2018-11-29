@@ -112,3 +112,25 @@ export function cmdDicToLaTeXItemConfs(
   ).map(i => cmdToLaTeXConf(cmdType, i));
   return items;
 }
+
+export function appendToDictionary(
+  dictionary: CommandDictionary,
+  entry: Command
+): CommandDictionary {
+  const name = typeof entry === "string" ? entry : entry.name;
+  if (isIncludeDirective(dictionary)) {
+    return [dictionary, entry];
+  } else {
+    return dictionary
+      .filter(i => isIncludeDirective(i) || !hasName(i, name))
+      .concat([entry]);
+  }
+}
+
+export function hasName(cmd: Command, name: string): boolean {
+  if (typeof cmd === "string") {
+    return cmd === name;
+  } else {
+    return cmd.name === name;
+  }
+}
