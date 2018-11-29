@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.0.8] - 2018-11-29
+
+### Fixed
+
+- Saving to the Global settings now also overwrites the workspace (folder) settings if exists.
+
 ## [0.0.7] - 2018-11-28
 
 ### Added
