@@ -23,7 +23,6 @@ import {
 } from "./latex_expander";
 import {
   preview,
-  CommandDefinition,
   CommandDictionary,
   cmdDicToLaTeXItemConfs,
   expandDictionary,
