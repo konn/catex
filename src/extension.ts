@@ -9,11 +9,15 @@ import {
   ExtensionContext
 } from "vscode";
 import { CommandDictionary, cmdDicToLaTeXItemConfs } from "./definitions";
-import { InputMethodConf } from "./generic-input-method/input_method";
+import {
+  InputMethodConf,
+  InputMethodItemConfig
+} from "./generic-input-method/input_method";
 import GenericInputMethodAPI from "./generic-input-method/api";
 import { CommandType } from "./latex_syntax";
 import CaTeXInputMethod from "./catex_input_method";
 import { LaTeXExpander } from "./latex_expander";
+import { parseJSON, uniquifyRightBiased, isString } from "./utils";
 
 export class CaTeXException implements Error {
   constructor(public name: string, public message: string) {}
@@ -52,6 +56,21 @@ export async function activate(context: ExtensionContext) {
     });
 
     dic.configurationName = `catex.${dict}-completion`;
+    dic.onDidChangeConfiguration = (
+      config: InputMethodConf
+    ): InputMethodItemConfig[] => {
+      console.log("Change, change, changed!");
+      let dic: string | (string | InputMethodItemConfig)[] = config.dictionary;
+      while (typeof dic === "string") {
+        dic = parseJSON(context, dic);
+      }
+      return uniquifyRightBiased<InputMethodItemConfig, string>(
+        dic,
+        isString,
+        s => s.label,
+        (path: string) => parseJSON(context, path)
+      );
+    };
 
     if (typeof dic.dictionary === "string") {
       dic.dictionary = context.asAbsolutePath(dic.dictionary);
