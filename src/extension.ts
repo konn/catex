@@ -41,7 +41,8 @@ export async function activate(context: ExtensionContext) {
   const conf: WorkspaceConfiguration = workspace.getConfiguration("catex");
   api.registerExpander("latex", LaTeXExpander);
   function register_input_method(dict: string, prefix: string) {
-    let dic: InputMethodConf = conf.get(`${dict}-completion`, {
+    const DICT_NAME = `${dict}-completion`;
+    let dic: InputMethodConf = conf.get(`${DICT_NAME}`, {
       languages: ["latex"],
       name: `CaTeX ${dict.charAt(0).toUpperCase()}${dict.slice(1)} Completion`,
       commandName: `catex.${dict}`,
@@ -49,6 +50,8 @@ export async function activate(context: ExtensionContext) {
       dictionary: `defaults/${dict}s.json`,
       renderMode: LaTeXExpander
     });
+
+    dic.configurationName = `catex.${dict}-completion`;
 
     if (typeof dic.dictionary === "string") {
       dic.dictionary = context.asAbsolutePath(dic.dictionary);
