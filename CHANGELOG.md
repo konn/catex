@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.0.9] - 2018-11-30
+
+### Fixed
+
+- Auto-reloading for image-completion now works properly.
+
 ## [0.0.8] - 2018-11-29
 
 ### Fixed
@@ -16,7 +22,7 @@
 
 - Fixes the bug that sometimes the on-line registration fails
 
-## [0.0.6] 2018-11-27
+## [0.0.6] - 2018-11-27
 
 ### Fixed
 
