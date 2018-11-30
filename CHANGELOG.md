@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.0.10] - 2018-11-30
+
+### Fixed
+
+- Auto-reloading for image-completion now works properly (again, sorry...).
+
 ## [0.0.9] - 2018-11-30
 
 ### Fixed
