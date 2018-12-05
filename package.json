@@ -169,7 +169,7 @@
               "triggers": [
                 ":"
               ],
-              "dictionary": "defaults/greeks.json",
+              "dictionary": "$GIM/defaults/greeks.json",
               "renderMode": "latex"
             },
             "properties": {

@@ -17,7 +17,12 @@ import GenericInputMethodAPI from "./generic-input-method/api";
 import { CommandType } from "./latex_syntax";
 import CaTeXInputMethod from "./catex_input_method";
 import { LaTeXExpander } from "./latex_expander";
-import { parseJSON, uniquifyRightBiased, isString } from "./utils";
+import {
+  parseJSON,
+  uniquifyRightBiased,
+  isString,
+  canonicalisePath
+} from "./utils";
 
 export class CaTeXException implements Error {
   constructor(public name: string, public message: string) {}
@@ -46,12 +51,14 @@ export async function activate(context: ExtensionContext) {
   api.registerExpander("latex", LaTeXExpander);
   function register_input_method(dict: string, prefix: string) {
     const DICT_NAME = `${dict}-completion`;
+    const defaultDicPath =
+      dict === "greek" ? `$GIM/defaults/greeks.json` : `defaults/${dict}s.json`;
     let dic: InputMethodConf = conf.get(`${DICT_NAME}`, {
       languages: ["latex"],
       name: `CaTeX ${dict.charAt(0).toUpperCase()}${dict.slice(1)} Completion`,
       commandName: `catex.${dict}`,
       triggers: [prefix],
-      dictionary: `defaults/${dict}s.json`,
+      dictionary: defaultDicPath,
       renderMode: LaTeXExpander
     });
 
@@ -73,11 +80,11 @@ export async function activate(context: ExtensionContext) {
     };
 
     if (typeof dic.dictionary === "string") {
-      dic.dictionary = context.asAbsolutePath(dic.dictionary);
+      dic.dictionary = canonicalisePath(context, dic.dictionary);
     } else {
       dic.dictionary = dic.dictionary.map(i => {
         if (typeof i === "string") {
-          return context.asAbsolutePath(i);
+          return canonicalisePath(context, i);
         } else {
           return i;
         }

@@ -1,11 +1,10 @@
-import { ExtensionContext } from "vscode";
+import { ExtensionContext, extensions } from "vscode";
 import { readFileSync } from "fs";
 import { isAbsolute } from "path";
+import * as path_util from "path";
 
 export function parseJSON<T>(context: ExtensionContext, path: string): T {
-  if (!isAbsolute(path)) {
-    path = context.asAbsolutePath(path);
-  }
+  path = canonicalisePath(context, path);
   return JSON.parse(readFileSync(path).toString());
 }
 
@@ -43,4 +42,39 @@ export function uniquifyRightBiased<T, S>(
 
 export function isString<T>(i: T | string): i is string {
   return typeof i === "string";
+}
+
+export function canonicalisePath(
+  context: ExtensionContext,
+  fp: string
+): string {
+  if (!isAbsolute(fp)) {
+    let matches: null | RegExpMatchArray;
+    if ((matches = fp.match(/^\$GIM\/(.+)$/))) {
+      const gim = extensions.getExtension("mr-konn.generic-input-method");
+      if (gim) {
+        return path_util.join(gim.extensionPath, matches[1]);
+      } else {
+        throw new CanonicalisePathException(
+          "Generic Input Method not found",
+          "The extension `generic-input-method` not found."
+        );
+      }
+    } else {
+      return context.asAbsolutePath(fp);
+    }
+  } else {
+    return fp;
+  }
+}
+
+export class CanonicalisePathException implements Error {
+  constructor(public name: string, public message: string) {}
+
+  /**
+   * toString
+   */
+  public toString() {
+    return `CaTeX: ${this.name}: ${this.message}`;
+  }
 }

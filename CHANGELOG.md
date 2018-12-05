@@ -1,5 +1,13 @@
 # Change Log
 
+## [0.0.11] - 2018-12-05
+
+- Provides a way to explicitly include dictionary defined in `generic-input-method`.
+  You can now specify dictionaries shipped with `generic-input-method` by prefixing path with `$GIM`.
+- Moves `greeks.json` back to `generic-input-method`
+  - If you have custom greek settings and uses `defaults/greeks.json` alias,
+    you have to use `$GIM/defaults/greeks.json` instead.
+
 ## [0.0.10] - 2018-11-30
 
 ### Fixed
