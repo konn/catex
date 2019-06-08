@@ -374,7 +374,7 @@
   "dependencies": {
     "event-stream": ">= 3.3.4",
     "tar": ">= 4.4.2",
-    "querystringify": ">=2.0.0",
+    "querystringify": "~>2.0.0",
     "braces": ">=2.3.1",
     "js-yaml": ">=3.13.1",
     "fstream": ">=1.0.12"
