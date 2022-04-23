@@ -13,7 +13,7 @@ import {
   WorkspaceConfiguration,
   window,
   ConfigurationTarget,
-  QuickPick
+  QuickPick,
 } from "vscode";
 import { CommandType, ArgSpec, ArgKind } from "./latex_syntax";
 import {
@@ -142,7 +142,7 @@ export class RegistererItem implements RenderableQuickPickItem {
   public picked: boolean = false;
   constructor(
     public dictionary: string,
-    private kind: CommandType,
+    private commandKind: CommandType,
     public label: string,
     private confTarget: ConfigurationTarget
   ) {
@@ -169,7 +169,7 @@ export class RegistererItem implements RenderableQuickPickItem {
     const conf: WorkspaceConfiguration = workspace.getConfiguration();
     const re = /^(\{[^\{\}\[\]]*?\}|\[[^\{\}\[\]]*?\])*$/;
     const noArgs =
-      this.kind === CommandType.Maketitle || this.kind === CommandType.Text;
+      this.commandKind === CommandType.Maketitle || this.commandKind === CommandType.Text;
     const specStr: String | undefined = noArgs
       ? undefined
       : await window.showInputBox({
@@ -210,7 +210,7 @@ export class RegistererItem implements RenderableQuickPickItem {
               args.push({ kind: ArgKind.Optional, placeholder, body });
             }
           }
-        } else if (this.kind === CommandType.Section) {
+        } else if (this.commandKind === CommandType.Section) {
           args = [{ kind: ArgKind.Fixed }];
         }
       }
@@ -218,9 +218,9 @@ export class RegistererItem implements RenderableQuickPickItem {
         label: this.label,
         body: this.label,
         filterText: this.label,
-        description: preview(this.kind, this.label),
+        description: preview(this.commandKind, this.label),
         args: args,
-        type: this.kind
+        type: this.commandKind
       };
 
       const DICTIONARY_NAME = `catex.${this.dictionary}.dictionary`;
@@ -229,7 +229,7 @@ export class RegistererItem implements RenderableQuickPickItem {
       await editor.insertSnippet(item.toSnippet(selection));
 
       const itemDef: Command =
-        this.kind === CommandType.Maketitle
+        this.commandKind === CommandType.Maketitle
           ? this.label
           : { name: this.label, args };
       const curConf = conf.inspect<CommandDictionary>(DICTIONARY_NAME);

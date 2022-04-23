@@ -14,5 +14,6 @@
     "no-inline-html": {
       "allowed_elements": ["kbd"]
     }
-  }
+  },
+  "licenser.license": "BSD3"
 }
